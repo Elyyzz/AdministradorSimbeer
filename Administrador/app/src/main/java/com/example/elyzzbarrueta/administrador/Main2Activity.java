@@ -54,8 +54,8 @@ public class Main2Activity extends AppCompatActivity {
 
 
                     prueba();
-                    Intent accesa = new Intent(Main2Activity.this, MainActivity.class);
-                        startActivity(accesa);
+                    //Intent accesa = new Intent(Main2Activity.this, MainActivity.class);
+//                        startActivity(accesa);
 
 
                 } else {
@@ -69,12 +69,10 @@ public class Main2Activity extends AppCompatActivity {
 
     public void prueba(){
         final AsyncHttpClient client = new AsyncHttpClient();
-
         final RequestParams params = new RequestParams();
-
         params.put("key", "value");
         params.put("more", "data");
-        client.get("http://192.168.0.128", params, new TextHttpResponseHandler() {
+        client.get("http://192.168.0.128/android/productos.php", params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                         System.out.println("******************** Fallo :( ");
@@ -82,18 +80,7 @@ public class Main2Activity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        client.post("http://192.168.0.128/android/hola.php", params, new TextHttpResponseHandler() {
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                            }
-                        });
-
+                        System.out.println("******************** Success :) ");
                     }
 
 
