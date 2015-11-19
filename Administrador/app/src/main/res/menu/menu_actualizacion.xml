@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.elyzzbarrueta.administrador.actualizacion">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_fermentacion" android:title="@string/title_activity_actualizacion"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_stock" android:title="@string/title_activity_stock"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_salir" android:title="@string/action_salir"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_listapedidosEn" android:title="@string/PedEntregados"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_listapedidosPr" android:title="@string/PedProceso"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>

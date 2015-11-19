@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Administrador</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Acerca de</string>
+    <string name="action_salir">Salir</string>
+    <string name="title_activity_actualizacion">Inicio Fermentación</string>
+    <string name="title_activity_stock">Stock</string>
+    <string name="title_activity_list_pedidos">Lista de Pedidos</string>
+    <string name="title_activity_detalle_pedidos">detalle Pedidos</string>
+    <string name="tipo">Tipo</string>
+    <string name="litros">Litros</string>
+    <string name="fechainicio">Fecha incio:</string>
+    <string name="fechafin">Fecha Fin:</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="actualizar">Actualizar</string>
+    <string-array name="pedidos">
+        <item>Pedido Detalle</item>
+        <item>Pedido Detalle</item>
+        <item>Pedido Detalle</item>
+        <item>Pedido Detalle</item>
+    </string-array>
+    <string-array name="Productos">
+        <item>Stout Chocolate</item>
+        <item>Porter Maple</item>
+        <item>Brow Ale</item>
+        <item>Irish Red Ale</item>
+        <item>Bierè de Garde</item>
+        <item>American Pale Ale</item>
+        <item>IPA Citric</item>
+        <item>Tripel</item>
+        <item>Luna de Octubre</item>
+    </string-array>
+    <string name="detallePedido">Detalle de pedido </string>
+    <string name="salir">Salir</string>
+    <string name="stockdet">Actualizacion de Stock</string>
+    <string name="bienvenido">Bienvenido</string>
+    <string name="PedProceso">Pedidos en Proceso</string>
+    <string name="PedEntregados">Pedidos Entregados</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="acceder">Acceder</string>
+    <string name="title_activity_acercade">acercade</string>
+</resources>

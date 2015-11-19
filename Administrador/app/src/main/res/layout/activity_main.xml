@@ -1,0 +1,68 @@
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/LinearLayout1"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="@dimen/activity_vertical_margin"
+android:paddingLeft="@dimen/activity_horizontal_margin"
+android:paddingRight="@dimen/activity_horizontal_margin"
+android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+tools:context=".MainActivity"
+    android:weightSum="1">
+
+
+    <RelativeLayout
+        android:layout_width="343dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.79"
+        android:weightSum="1">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/bienvenido"
+            android:id="@+id/textView3" />
+
+        <ImageView
+            android:layout_width="169dp"
+            android:layout_height="137dp"
+            android:layout_marginTop="40dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/web_hi_res_512"
+            android:layout_weight="0.62" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="234dp">
+        <ExpandableListView
+            android:id="@+id/listViewexp"
+            android:layout_width="wrap_content"
+            android:layout_height="223dp" >
+        </ExpandableListView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/salir"
+            android:id="@+id/Salir"
+            android:layout_marginLeft="140dp"
+            android:background="@android:color/holo_blue_light"
+            android:textColor="@android:color/background_light"
+            android:textStyle="normal"
+            android:textSize="20dp"
+            android:drawableBottom="@android:color/darker_gray"
+            android:layout_weight="0.23"/>
+
+    </LinearLayout>
+
+</LinearLayout>
