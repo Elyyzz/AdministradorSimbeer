@@ -10,9 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.elyzzbarrueta.administrador.peticiones.entity.pedido;
+import com.example.elyzzbarrueta.administrador.peticiones.httpAsync;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -21,10 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-
-import Conexion.Conexion;
-import cz.msebera.android.httpclient.Header;
+import java.util.ArrayList;
 
 
 public class Main2Activity extends AppCompatActivity {
@@ -33,7 +37,8 @@ public class Main2Activity extends AppCompatActivity {
     EditText user;
     EditText pass;
 
-
+    final ArrayList<pedido> pedidosAll=new ArrayList<pedido>();
+    final RequestParams params = new RequestParams();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +56,37 @@ public class Main2Activity extends AppCompatActivity {
                 String us = user.getText().toString().trim();
                 String pwd = pass.getText().toString().trim();
                 if (us.equals("Administrador") && pwd.equals("BeerAdm")) {
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    client.get("http://192.168.0.128:8080/webServiceDemo/api/getPedidos/listaPedidos",params, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                            System.out.println("**************** Failed :'( ");
+                            pedidosAll.clear();
+                        }
+                        @Override
+                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray timeline) {
+                            System.out.println("**************** Success :) ");
+                            System.out.println(timeline);
 
-
-                    prueba();
-                    //Intent accesa = new Intent(Main2Activity.this, MainActivity.class);
-//                        startActivity(accesa);
+                            try {
+                                for(int i=0;  i<timeline.length(); i++){
+                                   pedido pedido= new pedido();
+                                    JSONObject obj=timeline.getJSONObject(1);
+                                    pedido.setId(obj.getInt("idPedido"));
+                                    pedido.setNomCliente(obj.getString("nomCliente"));
+                                    pedido.setEstatus(obj.getString("estatus"));
+                                    pedidosAll.add(pedido);
+                                }
+                            } catch (JSONException e) {
+                                verToa("Error  al convertir los datos ****************");
+                            }
+                        }
+                    });
 
 
                 } else {
-                    verToa();
+                    verToa("Usuario y/o Password incorrecto");
+                    pass.setText("");
                 }
 
             }
@@ -68,6 +95,7 @@ public class Main2Activity extends AppCompatActivity {
 
 
     public void prueba(){
+      pedido p= new pedido();
         final AsyncHttpClient client = new AsyncHttpClient();
         final RequestParams params = new RequestParams();
         params.put("key", "value");
@@ -81,7 +109,7 @@ public class Main2Activity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
                         System.out.println("******************** Success :) ");
-                        System.out.println("********************RESULTADO: | "+responseString);
+                        System.out.println("********************RESULTADO: | " + responseString);
                     }
 
                 }
@@ -130,8 +158,8 @@ public class Main2Activity extends AppCompatActivity {
 
 
 
-    public void verToa(){
-        Toast.makeText(this, "Usuario y/o Password incorrecto", Toast.LENGTH_LONG).show();
+    public void verToa(String  text){
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -160,5 +188,45 @@ public class Main2Activity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getPedidos(String metodo){
+        AsyncHttpClient client = new AsyncHttpClient();
+        final RequestParams params = new RequestParams();
+
+        client.get("http://192.168.0.128:8080/webServiceDemo/api/getPedidos/listaPedidos",params, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                        System.out.println("**************** Failed :'( ");
+                        pedidosAll.clear();
+                                            }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray timeline) {
+                        System.out.println("**************** Success :) ");
+                        System.out.println(timeline);
+
+                        pedido pedido;
+                        try {
+                            for(int i=0;  i<timeline.length(); i++){
+                                pedido= new pedido();
+                                JSONObject obj=timeline.getJSONObject(1);
+                                pedido.setId(obj.getInt("idPedido"));
+                                pedido.setNomCliente(obj.getString("nomCliente"));
+                                pedido.setEstatus(obj.getString("estatus"));
+                                pedidosAll.add(pedido);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+
+
+                }
+        );
+
     }
 }
