@@ -72,7 +72,7 @@ public class Main2Activity extends AppCompatActivity {
         final RequestParams params = new RequestParams();
         params.put("key", "value");
         params.put("more", "data");
-        client.get("http://192.168.0.128/android/productos.php", params, new TextHttpResponseHandler() {
+        client.get("http://192.168.0.128:8080/webServiceDemo/api/demo/listaproductos", params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                         System.out.println("******************** Fallo :( ");
@@ -81,8 +81,8 @@ public class Main2Activity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
                         System.out.println("******************** Success :) ");
+                        System.out.println("********************RESULTADO: | "+responseString);
                     }
-
 
                 }
         );
