@@ -57,7 +57,7 @@ public class Main2Activity extends AppCompatActivity {
                 String pwd = pass.getText().toString().trim();
                 if (us.equals("Administrador") && pwd.equals("BeerAdm")) {
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.get("http://192.168.0.128:8080/webServiceDemo/api/getPedidos/listaPedidos",params, new JsonHttpResponseHandler() {
+                    client.get("http://192.168.0.128:8080/webServiceDemo/api/getPedidos/listaPedidos", params, new JsonHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                             System.out.println("**************** Failed :'( ");
@@ -67,35 +67,36 @@ public class Main2Activity extends AppCompatActivity {
                         public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray timeline) {
                             System.out.println("**************** Success :) ");
                             System.out.println(timeline);
-
+                            JSONArray jsonArray = timeline;
                             try {
-                                for(int i=0;  i<timeline.length(); i++){
-                                   pedido pedido= new pedido();
-                                    JSONObject obj=timeline.getJSONObject(1);
+                                for (int i = 0; i < timeline.length(); i++) {
+                                    pedido pedido = new pedido();
+                                    JSONObject obj = jsonArray.getJSONObject(1);
                                     pedido.setId(obj.getInt("idPedido"));
                                     pedido.setNomCliente(obj.getString("nomCliente"));
                                     pedido.setEstatus(obj.getString("estatus"));
                                     pedidosAll.add(pedido);
+                                    System.out.println(pedidosAll.size());
+                                    Bundle  b= new Bundle();
+//b.putArrayList("pedidosAll",pedidosAll);
+                                    //enviarlo al asig activity por el bundle  y ejecutar la activity
                                 }
                             } catch (JSONException e) {
                                 verToa("Error  al convertir los datos ****************");
                             }
                         }
                     });
-
-
                 } else {
                     verToa("Usuario y/o Password incorrecto");
                     pass.setText("");
                 }
-
             }
         });
     }
 
 
     public void prueba(){
-      pedido p= new pedido();
+        pedido p= new pedido();
         final AsyncHttpClient client = new AsyncHttpClient();
         final RequestParams params = new RequestParams();
         params.put("key", "value");
@@ -105,16 +106,13 @@ public class Main2Activity extends AppCompatActivity {
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                         System.out.println("******************** Fallo :( ");
                     }
-
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
                         System.out.println("******************** Success :) ");
                         System.out.println("********************RESULTADO: | " + responseString);
                     }
-
                 }
         );
-
     }
     private  String  Envia(String  datos) throws IOException {
         String line="ELy";
@@ -191,42 +189,8 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void getPedidos(String metodo){
-        AsyncHttpClient client = new AsyncHttpClient();
-        final RequestParams params = new RequestParams();
-
-        client.get("http://192.168.0.128:8080/webServiceDemo/api/getPedidos/listaPedidos",params, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        System.out.println("**************** Failed :'( ");
-                        pedidosAll.clear();
-                                            }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray timeline) {
-                        System.out.println("**************** Success :) ");
-                        System.out.println(timeline);
-
-                        pedido pedido;
-                        try {
-                            for(int i=0;  i<timeline.length(); i++){
-                                pedido= new pedido();
-                                JSONObject obj=timeline.getJSONObject(1);
-                                pedido.setId(obj.getInt("idPedido"));
-                                pedido.setNomCliente(obj.getString("nomCliente"));
-                                pedido.setEstatus(obj.getString("estatus"));
-                                pedidosAll.add(pedido);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
 
-                    }
-
-
-                }
-        );
 
     }
 }
