@@ -13,7 +13,9 @@ import android.widget.Toast;
 import com.example.elyzzbarrueta.administrador.peticiones.entity.pedido;
 import com.example.elyzzbarrueta.administrador.peticiones.httpAsync;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -26,9 +28,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HeaderElement;
+import cz.msebera.android.httpclient.ParseException;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 
 public class Main2Activity extends AppCompatActivity {
@@ -38,7 +48,7 @@ public class Main2Activity extends AppCompatActivity {
     EditText pass;
 
     final ArrayList<pedido> pedidosAll=new ArrayList<pedido>();
-    final RequestParams params = new RequestParams();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,36 +66,14 @@ public class Main2Activity extends AppCompatActivity {
                 String us = user.getText().toString().trim();
                 String pwd = pass.getText().toString().trim();
                 if (us.equals("Administrador") && pwd.equals("BeerAdm")) {
-                    AsyncHttpClient client = new AsyncHttpClient();
-                    client.get("http://192.168.0.128:8080/webServiceDemo/api/getPedidos/listaPedidos", params, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                            System.out.println("**************** Failed :'( ");
-                            pedidosAll.clear();
-                        }
-                        @Override
-                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray timeline) {
-                            System.out.println("**************** Success :) ");
-                            System.out.println(timeline);
-                            JSONArray jsonArray = timeline;
-                            try {
-                                for (int i = 0; i < timeline.length(); i++) {
-                                    pedido pedido = new pedido();
-                                    JSONObject obj = jsonArray.getJSONObject(1);
-                                    pedido.setId(obj.getInt("idPedido"));
-                                    pedido.setNomCliente(obj.getString("nomCliente"));
-                                    pedido.setEstatus(obj.getString("estatus"));
-                                    pedidosAll.add(pedido);
-                                    System.out.println(pedidosAll.size());
-                                    Bundle  b= new Bundle();
-//b.putArrayList("pedidosAll",pedidosAll);
-                                    //enviarlo al asig activity por el bundle  y ejecutar la activity
-                                }
-                            } catch (JSONException e) {
-                                verToa("Error  al convertir los datos ****************");
-                            }
-                        }
-                    });
+                    try {
+                        prueba();
+                    } catch (JSONException e) {
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
                     verToa("Usuario y/o Password incorrecto");
                     pass.setText("");
@@ -95,66 +83,36 @@ public class Main2Activity extends AppCompatActivity {
     }
 
 
-    public void prueba(){
-        pedido p= new pedido();
-        final AsyncHttpClient client = new AsyncHttpClient();
-        final RequestParams params = new RequestParams();
-        params.put("key", "value");
-        params.put("more", "data");
-        client.get("http://192.168.0.128:8080/webServiceDemo/api/demo/listaproductos", params, new TextHttpResponseHandler() {
+    public void prueba() throws JSONException, UnsupportedEncodingException {
+        AsyncHttpClient client = new AsyncHttpClient();
+        JSONObject jsonParams = new JSONObject();
+        jsonParams.put("notes", "Test api support");
+        StringEntity entity = new StringEntity(jsonParams.toString());
+        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+        final RequestHandle get = client.post(this, "http://192.168.0.104/android/hola.php",  entity, "application/json", new TextHttpResponseHandler() {
+
                     @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        System.out.println("******************** Fallo :( ");
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        System.out.println("--------------------"+responseString);
+                        System.out.println("*************Failed");
+
+
                     }
+
                     @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        System.out.println("******************** Success :) ");
-                        System.out.println("********************RESULTADO: | " + responseString);
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        String he=headers.toString();
+                        System.out.println("********** he"+he);
+                        if (statusCode == 200) {
+                            String rest = new String(responseString);
+                            System.out.println("***********Success " + rest);
+                            Toast.makeText(Main2Activity.this, "todo ok" + rest, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
         );
-    }
-    private  String  Envia(String  datos) throws IOException {
-        String line="ELy";
-        String targetURL = "http://192.168.10.215/android/hola.php";
-        String urlParameters = "a="+datos;
-        URL url = null;
-        url = new URL(targetURL);
-        HttpURLConnection connection = null;
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type",
-                "application/x-www-form-urlencoded");
-
-        connection.setRequestProperty("Content-Length", ""
-                + Integer.toString(urlParameters.getBytes().length));
-        connection.setRequestProperty("Content-Language", "en-US");
-
-        connection.setUseCaches(false);
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-
-        DataOutputStream wr;
-        wr = new DataOutputStream(connection.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
-        InputStream is;
-        is = connection.getInputStream();
-        BufferedReader rd;
-        rd = new BufferedReader(new InputStreamReader(is));
-        System.out.println("Res"+rd);
-
-        while (rd != null) {
-            line=rd.readLine();
-            return line;
-            //Toast.makeText(this, line, Toast.LENGTH_LONG).show();
-        }
-        return line;
 
     }
-
-
 
     public void verToa(String  text){
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
@@ -189,8 +147,39 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void getPedidos(String metodo){
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
 
-
+        client.get("http://simbeer.byethost22.com/hola.php", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("**************** Failed :'( ");
+                System.out.println("******** Code "+statusCode);
+                pedidosAll.clear();
+            }
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray timeline) {
+                System.out.println("**************** Success :) ");
+                System.out.println(timeline);
+                JSONArray jsonArray = timeline;
+                try {
+                    for (int i = 0; i < timeline.length(); i++) {
+                        pedido pedido = new pedido();
+                        JSONObject obj = jsonArray.getJSONObject(1);
+                        pedido.setId(obj.getInt("idPedido"));
+                        pedido.setNomCliente(obj.getString("nomCliente"));
+                        pedido.setEstatus(obj.getString("estatus"));
+                        pedidosAll.add(pedido);
+                        System.out.println(pedidosAll.size());
+                        Bundle  b= new Bundle();
+                        //b.putArrayList("pedidosAll",pedidosAll);
+                        //enviarlo al asig activity por el bundle  y ejecutar la activity
+                    }
+                } catch (JSONException e) {
+                    verToa("Error  al convertir los datos ****************");
+                }
+            }
+        });
 
     }
 }
