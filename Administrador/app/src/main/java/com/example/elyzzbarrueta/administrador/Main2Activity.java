@@ -66,14 +66,8 @@ public class Main2Activity extends AppCompatActivity {
                 String us = user.getText().toString().trim();
                 String pwd = pass.getText().toString().trim();
                 if (us.equals("Administrador") && pwd.equals("BeerAdm")) {
-                    try {
-                        prueba();
-                    } catch (JSONException e) {
-
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
+                    Intent menu = new  Intent(Main2Activity.this, MainActivity.class);
+                    startActivity(menu);
                 } else {
                     verToa("Usuario y/o Password incorrecto");
                     pass.setText("");
@@ -89,7 +83,7 @@ public class Main2Activity extends AppCompatActivity {
         jsonParams.put("notes", "Test api support");
         StringEntity entity = new StringEntity(jsonParams.toString());
         entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-        final RequestHandle get = client.post(this, "http://192.168.0.104/android/hola.php",  entity, "application/json", new TextHttpResponseHandler() {
+        final RequestHandle get = client.post(this, "http://192.168.0.104/android/insert.php",  entity, "application/json", new TextHttpResponseHandler() {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
